@@ -12,6 +12,7 @@ from datetime import datetime
 
 class DeclaracionesTest(unittest.TestCase):
 
+    """Limpia la tabla cada vez que se ejecutan las pruebas"""
     @classmethod
     def setUpClass(cls):
         ControladorDeclaraciones.EliminarTabla()
@@ -19,9 +20,9 @@ class DeclaracionesTest(unittest.TestCase):
     
         cls.ids = []
         for i, declaracion in enumerate([
-            Declaracion(None, None, 100000000, 4000000, 2, 3000000, 93000000, 1867, 5500000, None),
-            Declaracion(None, None, 85000000, 3500000, 1, 1000000, 80500000, 1617, 4200000, None),
-            Declaracion(None, None, 60000000, 2000000, 3, 1500000, 56500000, 1134, 2600000, None)
+            Declaracion(None, None, 100000000, 4000000, 2, 3000000, 93000000, 1868, 8119229, None),
+            Declaracion(None, None, 85000000, 3500000, 1, 1000000, None, None, None, "Los aportes a salud y pensión superan el 4% de los ingresos brutos anuales."),
+            Declaracion(None, None, 60000000, 2000000, 3, 1500000, 70500000, 1416, 3084550, None)
         ]):
             inserted_id = ControladorDeclaraciones.InsertarDeclaracion(declaracion)
             cls.ids.append(inserted_id)
@@ -51,7 +52,7 @@ class DeclaracionesTest(unittest.TestCase):
             base_gravable=None,
             base_gravable_uvt=None,
             impuesto_renta=None,
-            mensaje_error= "Los aportes a salud y pensión superan el 4% de los ingresos brutos anuales (Caso 9)."
+            mensaje_error= "Los aportes a salud y pensión superan el 4% de los ingresos brutos anuales."
         )
         ControladorDeclaraciones.InsertarDeclaracion(declaracion)
 
@@ -73,7 +74,7 @@ class DeclaracionesTest(unittest.TestCase):
     def test_buscar_declaracion_1(self):
         buscado = ControladorDeclaraciones.BuscarPorId(self.ids[0])
         self.assertIsNotNone(buscado)
-        self.assertEqual(buscado.base_gravable_uvt, 1867)
+        self.assertEqual(buscado.base_gravable_uvt, 1868)
     
     def test_buscar_declaracion_2(self):
         buscado = ControladorDeclaraciones.BuscarPorId(self.ids[1])
@@ -83,7 +84,7 @@ class DeclaracionesTest(unittest.TestCase):
     def test_buscar_declaracion_3(self):
         buscado = ControladorDeclaraciones.BuscarPorId(self.ids[2])
         self.assertIsNotNone(buscado)
-        self.assertEqual(buscado.impuesto_renta, 2600000)
+        self.assertEqual(buscado.impuesto_renta, 3084550)
     
 
     # -------------------- Pruebas de Modificación (simulada como inserción directa SQL) --------------------
