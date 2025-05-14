@@ -35,8 +35,8 @@ class DeclaracionesTest(unittest.TestCase):
             numero_dependientes=2,
             intereses_credito_hipotecario=3000000,
             base_gravable=93000000,
-            base_gravable_uvt=1867,
-            impuesto_renta=5500000,
+            base_gravable_uvt=1868,
+            impuesto_renta=8119229,
             mensaje_error=None
         )
         ControladorDeclaraciones.InsertarDeclaracion(declaracion)
@@ -48,23 +48,23 @@ class DeclaracionesTest(unittest.TestCase):
             aportes_salud_pension=3500000,
             numero_dependientes=1,
             intereses_credito_hipotecario=1000000,
-            base_gravable=80500000,
-            base_gravable_uvt=1617,
-            impuesto_renta=4200000,
-            mensaje_error=None
+            base_gravable=None,
+            base_gravable_uvt=None,
+            impuesto_renta=None,
+            mensaje_error= "Los aportes a salud y pensión superan el 4% de los ingresos brutos anuales (Caso 9)."
         )
         ControladorDeclaraciones.InsertarDeclaracion(declaracion)
 
     def test_insertar_declaracion_3(self):
         declaracion = Declaracion(
             id=None, fecha=None,
-            ingresos_brutos_anuales=60000000,
+            ingresos_brutos_anuales=74000000,
             aportes_salud_pension=2000000,
             numero_dependientes=3,
             intereses_credito_hipotecario=1500000,
-            base_gravable=56500000,
-            base_gravable_uvt=1134,
-            impuesto_renta=2600000,
+            base_gravable=70500000,
+            base_gravable_uvt=1416,
+            impuesto_renta=3084550,
             mensaje_error=None
         )
         ControladorDeclaraciones.InsertarDeclaracion(declaracion)
