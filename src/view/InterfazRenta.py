@@ -85,40 +85,6 @@ class RentaApp(App):
         # Retorna el layout para que se muestre en pantalla
         return layout
 
-    # Función que se llama al presionar el botón de cálculo
-#    def calcular_impuesto(self, instance):
-#        try:
-#            # Convierte los datos ingresados a sus respectivos tipos
-#            ingresos_brutos_anuales = float(self.ingresos_input.text)
-#            aportes_salud_pension = float(self.aportes_input.text)
-#            numero_dependientes = int(self.dependientes_input.text)
-#            intereses_credito_hipotecario = float(self.intereses_input.text)
-#
-#            # Calcula la base gravable usando la lógica del modelo
-#            base_gravable = obtener_base_gravable(ingresos_brutos_anuales, aportes_salud_pension, numero_dependientes, intereses_credito_hipotecario)
-#            self.base_gravable_label.text = f"Base gravable: ${base_gravable:,.2f}"
-#
-#            # Calcula la base gravable expresada en UVT
-#            base_gravable_en_uvt = obtener_base_gravable_en_uvt(base_gravable)
-#            self.base_gravable_uvt_label.text = f"Base gravable en UVT: {base_gravable_en_uvt} UVT"
-#
-#            # Calcula el impuesto sobre la renta
-#            impuesto = obtener_impuesto(base_gravable_en_uvt)
-#            self.impuesto_label.text = f"Impuesto de renta: ${impuesto:,.2f}"
-#
-#        # Manejo de errores específicos y generales
-#        except ValueError:
-#            self.mostrar_popup("Error", "Por favor, ingrese valores numéricos válidos.")
-#        except IngresosNegativosError as e:
-#            self.mostrar_popup("Error", str(e))
-#        except DependientesExcedidoError as e:
-#            self.mostrar_popup("Error", str(e))
-#        except AportesSaludExcedidoError as e:
-#            self.mostrar_popup("Error", str(e))
-#        except IngresosInferioresAlMinimoError as e:
-#            self.mostrar_popup("Error", str(e))
-#        except Exception as e:
-#            self.mostrar_popup("Error inesperado", str(e))
 
     def calcular_impuesto(self, instance):
         try:
