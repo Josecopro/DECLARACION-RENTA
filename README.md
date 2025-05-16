@@ -9,6 +9,39 @@
 - Samuel Uribe
 - Santiago Martinez
 
+## ¿Qué es y para qué es?
+Programa que permite calcular si un usuario debe declarar renta, proporcionando valores como el impuesto a pagar y su vase gravable en Unidad de Valor Tributario (UVT) y en pesos colombianos (COP)
+
+## Arquitectura del proyecto:
+
+```
+DECLARACION_RENTA/
+├──.vscode/
+|   └──settings.json
+├──sql/
+|   └──crear_declaraciones.sql
+├──src/
+|   ├──controller/
+|   |    └──contolador_declaraciones.py
+|   ├──model/
+|   |    ├──__init__.py
+|   |    ├──declaraciones.py
+|   |    └──LogicaRenta.py
+|   └──view/
+|        ├──__init__.py
+|        ├──consola_renta.py
+|        └──InterfazRenta.py
+|
+├──tests/
+|   ├──Tests_Renta1.py
+|   └──tests_declaraiones.py
+|
+├──.gitignore
+├──README.md
+├──SecretConfig-sample.py
+└──requirements.txt
+```
+
 ## ¿Como ejecuto la GUI?
 
 La aplicación cuenta con una interfaz gráfica construida con **Kivy** para calcular el impuesto sobre la renta en Colombia.  
@@ -41,6 +74,84 @@ Esto garantizará que los módulos se importen correctamente y la aplicación se
 
 ---
 
+### ▶️ Ejecutar interfaz de consola
+- Inicializar la consola de sus sistema operativo, y, a demás, buscar allí la ruta del archivo del programa (DECLARACION-RENTA).
+- En la consola, ubicados en la carpeta raíz del proyecto, utilice el siguiente comando:
+
+  ```
+  py src/view/console/ConsolaRenta.py
+  ```
+---
+
+## ¿Cómo inicializo una base de datos para el proyecto?
+
+La aplicación cuenta con un acceso a una base de datos PostgreSQL guardada en la nube.
+
+### Crear columnas de base de datos
+- en su servidor en la nube (recomendablemente use el servicio online de *Neon.tech*) deberá crear un nuevo proyecto en el cual debe pegar el código que se encuentra en el archivo crear_declaraciones.sql la carpeta llamada sql/
+```
+DECLARACION_RENTA/
+├──sql/
+|   └──crear_declaraciones.sql
+```
+-una vez pegado y ejecutado el código se creara una tabla en su base de datos
+
+---
+
+### Acceso a su base de datos desde el proyecto
+- En la carpeta raíz del proecto encontrará un proyecto con el nombre de *SecretConfig-sample.py*, allí encontrará una guia de como debe ingresar las credenciales de su base de datos, que encontrará en el servicio Neon o cualquiera que utilice.
+- Una vez reemplazados los strings en el archivo *SecretConfig-sample.py*, puede renombrar el archivo simplemente como *SecretConfig.py* (o simplemente duplicarlo con ese nombre), esto hará que el programa pueda acceeder a su base de datos.
+    *IMPORTANTE*: Recuerde no exponer sus credenciales en el navegador, el puerto de conexión con la base de datos, si está utilizando PostgreSQl siempre será el                   mismo "5432"
+---
+
+### Inicializar base de datos:
+- Luego de hacer los pasos anteriores, para inicializar la base de datos y asegurarse de que esta funcione correctamente, deberá ejecutar las pruebas unitarias del proyecto que se encuentran en la carpeta tests/.
+
+```
+DECLARACION_RENTA/
+├──.vscode/
+|   └──settings.json
+|
+├──tests/
+    ├──Tests_Renta1.py
+    └──tests_declaraiones.py
+```
+---
+### Guardar calculos del programa en base de datos
+- Una vez inicializada la base de datos con los pasos anteriores, todo cálculo que genere la aplicación principal (ejecutada desde la interfaz gráfica InterfazRenta.py) se guardará automaticamente en su base de datos.
+---
+
+## ✅ ¿Cómo ejecuto las pruebas unitarias?
+
+- El proyecto utiliza el framework *Unittest* de python para correr pruebas.
+- Si está utilizando VSCode, el proyecto cuenta con un archivo settings.json que ya tiene un pre-ajuste del explorador de pruebas.
+- Asegurese de que el explorador compile todas las pruebas del proyecto antes de ejecutar.
+
+---
+
+### Ejecución general en explorador
+- Corra las pruebas desde el explorador de VSCode y espere a que estas se completen (31 pruebas en total)
+
+---
+### Pruebas de funcionalidad
+- El archivo Test_Renta1.py prueba que la funcionalidad principal del proyecto cumpla correctamente con todas las expectativas, siguiendo con una serie de casos de prueba que encontrará en un enlace mas adelante en este documento.
+- puede ejecutarlas directamente con el archivo abierto en el editor, presionando el botón de "Run". O, también puede ejecutar el siguiente comando en consola.
+
+```bash
+python -m tests.Test_Renta1
+```
+---
+
+### Pruebas de base de datos
+- El archivo tests_declaraciones.py prueba que las funcionalidades del programa de insertar, buscar y modificar datos o filas en la base de datos se ejecuten correctamente, y los podrá observar en su base de datos una vez ejecute las pruebas.  
+- puede ejecutarlas directamente con el archivo abierto en el editor, presionando el botón de "Run". O, también puede ejecutar el siguiente comando en consola.
+
+```bash
+python -m tests.tests_declaraciones
+```
+
+---
+
 ### 🐞 ¿Errores comunes?
 
 - Si ves `ModuleNotFoundError: No module named 'src'`, asegúrate de estar ejecutando el comando **desde la raíz del proyecto** y no desde dentro de `src`.
@@ -50,126 +161,14 @@ Puedes confirmar que estás en la raíz si ves una estructura como esta:
 ```
 📁 tu_proyecto/
 ├── src/
+|   ├── controller/
 │   ├── model/
 │   └── view/
 └── README.md
 ```
 
-## ¿Qué es y para qué es?
-Programa que permite calcular si un usuario debe declarar renta, proporcionando valores como el impuesto a pagar y su vase gravable en Unidad de Valor Tributario (UVT) y en pesos colombianos (COP)
 
-## ¿Cómo lo hago funcionar?
-- Inicializar la consola de sus sistema operativo, y, a demás, buscar allí la ruta del archivo del programa (DECLARACION-RENTA).
-- En la consola, ubicados en la carpeta raíz del proyecto, utilice el siguiente comando:
-
-  ```
-  py src/view/console/ConsolaRenta.py
-  ```
-## Descripciòn de la arquitectura
-
-**Este proyecto presenta una arquitectura con una clara separación de responsabilidades, organizada en los siguientes directorios y archivos clave:**
-
-  src/model: Este directorio contiene la capa del Modelo. Dentro de él, se encuentra el archivo LogicaRenta.py, que encapsula la lógica de negocio fundamental para el cálculo del impuesto sobre la renta. Esto incluye las funciones para determinar la base gravable, convertirla a UVT y calcular el impuesto final, así como las definiciones de las excepciones personalizadas para el manejo de errores. El archivo __init__.py (aunque esté vacío en la imagen) se utiliza para marcar el directorio model como un paquete de Python.
-    
-  src/view/console: Este directorio alberga la capa de la Vista (interfaz de usuario) específica para la consola. El archivo ConsolaRenta.py contiene el código para la interfaz de línea de comandos, permitiendo a los usuarios interactuar con la aplicación a través de la terminal para ingresar los datos necesarios y visualizar los resultados del cálculo del impuesto.
-    
-  tests: Este directorio está dedicado a las Pruebas. Aunque la imagen no muestra el contenido específico, se espera que contenga archivos de prueba (como el Test_Renta1.py mencionado en tu código anterior) que utilizan el módulo unittest para verificar la correcta funcionalidad de la lógica implementada en el modelo.
-
-**Además de estas capas principales, se observan otros archivos en la raíz del proyecto:**
-
-  README.md: Este es el archivo de documentación principal del proyecto, donde se deben incluir las instrucciones de uso, la descripción de la arquitectura y otra información relevante.
-    
-  DECLARACION DE RENTA.mp3: Este archivo es el audio en el que el experto que nos acompaña da una visión general de lo que sería el contexto de la declaración de renta de un asalariado.
-    
-  _pycache_: Este directorio es creado por Python para almacenar archivos bytecode compilados de los módulos, lo que ayuda a acelerar la carga de los programas.
-    
-  Archivos .cpython-*.pyc: Estos también son archivos bytecode compilados por Python para diferentes versiones del lenguaje.
-    
-  .vscode/settings.json: Este archivo contiene configuraciones específicas para el editor Visual Studio Code.
-    
-   En resumen, la arquitectura del proyecto sigue un patrón que separa la lógica de negocio (en el modelo) de la interfaz de usuario (en la vista/consola), facilitando la mantenibilidad y la realización de pruebas unitarias. La capa de pruebas (tests) asegura la calidad del código.
-
-## Ejecución de Pruebas Unitarias
-
-  A continuación, se explica cómo ejecutar las pruebas unitarias utilizando Visual Studio Code y PyCharm.
-
-**Opción 1: Visual Studio Code (VS Code)**
-
-  Abre tu proyecto en VS Code: Asegúrate de tener la carpeta raíz de tu proyecto abierta en Visual Studio Code.
-  
-  Instala la extensión de Python: Si aún no la tienes, instala la extensión oficial de Python de Microsoft desde el Marketplace de VS Code.
-  
-  Configura las pruebas (si es necesario):
-  
-  Ve a la vista de "Testing" (icono del matraz de laboratorio en la barra de actividad lateral). Si no lo ves, puedes habilitarlo desde el menú View > Explorer y buscando "Testing", o usando el comando View: Show Test Explorer.
-  Si VS Code no detecta automáticamente tus pruebas, verás un mensaje para configurar las pruebas. Haz clic en "Configure Python Tests".
-  Selecciona el framework de pruebas: Elige unittest.
-  Selecciona el directorio raíz de las pruebas: Indica la carpeta donde guardaste tus archivos de prueba (por ejemplo, tests).
-  Especifica el patrón de nombres de los archivos de prueba: El patrón predeterminado suele ser test*.py, que debería funcionar si nombraste tu archivo como test_renta.py.
-  Haz clic en "Discover Tests".
-  Ejecuta las pruebas:
-  
-  Una vez configuradas, la vista de "Testing" mostrará las pruebas que ha encontrado.
-  Puedes ejecutar todas las pruebas haciendo clic en el botón "Run All Tests" (icono de play en la parte superior).
-  También puedes ejecutar pruebas individuales o grupos de pruebas haciendo clic derecho sobre ellas y seleccionando "Run".
-  Analiza los resultados: Los resultados de las pruebas se mostrarán en la vista de "Testing". Verás qué pruebas pasaron (icono de check verde) y cuáles fallaron (icono de aspa roja). Al seleccionar una prueba fallida, podrás ver los detalles del error en el panel de salida.
-
-**Opción 2: PyCharm**
-
-  Abre tu proyecto en PyCharm: Asegúrate de tener la carpeta raíz de tu proyecto abierta en PyCharm.
-  
-  PyCharm detectará las pruebas automáticamente (generalmente): PyCharm tiene soporte integrado para unittest y, por lo general, detecta automáticamente los archivos y las clases de prueba dentro de tu proyecto.
-  
-  Ejecuta las pruebas:
-  
-  Desde el Explorador de Proyectos: Navega hasta la carpeta que contiene tus archivos de prueba (por ejemplo, la carpeta tests). Haz clic derecho sobre la carpeta o sobre un archivo de prueba específico (test_renta.py) y selecciona "Run 'Unittests in tests'" o "Run 'Unittest test_renta.py'", respectivamente.
-  Desde el Editor de Código: Abre el archivo de prueba (test_renta.py). Haz clic derecho en cualquier lugar dentro de la clase de prueba (RentaTestNorm o RentaTestExt o RentaTestErr) o dentro de un método de prueba específico (por ejemplo, test_base_gravable_1) y selecciona "Run 'Unittests in <nombre_de_la_clase>' " o "Run '<nombre_del_método>' ".
-  Analiza los resultados: PyCharm abrirá una ventana de "Run" en la parte inferior de la interfaz, mostrando los resultados de las pruebas. Verás una lista de las pruebas ejecutadas, indicando si pasaron (icono verde) o fallaron (icono rojo). Al seleccionar una prueba fallida, podrás ver la traza de la excepción y el punto exacto de la falla.
-  
-  Nota Importante: Asegúrate de que tu entorno de Python esté correctamente configurado en ambos IDEs para que puedan encontrar e importar las dependencias de tu proyecto, incluyendo el código fuente en la carpeta src.
-  
-## Ejecución de la Interfaz de Consola
-
-  A continuación, se explica cómo ejecutar la interfaz de consola de la calculadora de impuesto sobre la renta utilizando Visual Studio Code y PyCharm.
-
-**Opción 1: Visual Studio Code (VS Code)**
-
-  Abre tu proyecto en VS Code: Asegúrate de tener la carpeta raíz de tu proyecto abierta en Visual Studio Code.
-  
-  Abre el archivo de la interfaz de consola: Navega hasta la carpeta src/view/console y abre el archivo ConsolaRenta.py.
-  
-  Abre la terminal integrada: En VS Code, abre la terminal integrada yendo al menú Terminal > New Terminal.
-  
-  Navega al directorio src/view/console: Utiliza el comando cd para cambiar el directorio actual de la terminal a la ubicación del script ConsolaRenta.py. Asumiendo que estás en la raíz del proyecto, el comando sería:
-
-    cd src/view/console
-    
-  Ejecuta el script: Una vez que estés en el directorio correcto, ejecuta el script de Python utilizando el siguiente comando:
-
-
-    python ConsolaRenta.py
-    
-  Interactúa con la calculadora: La calculadora se iniciará en la terminal y te pedirá que ingreses los datos solicitados (ingresos brutos anuales, aportes a salud y pensión, número de dependientes e intereses de crédito hipotecario). Ingresa los valores cuando se te solicite y presiona Enter.
-  
-  Visualiza los resultados: La calculadora mostrará la base gravable, la base gravable en UVT y el impuesto de renta calculado en la terminal.
-
-**Opción 2: PyCharm**
-
-  Abre tu proyecto en PyCharm: Asegúrate de tener la carpeta raíz de tu proyecto abierta en PyCharm.
-  
-  Abre el archivo de la interfaz de consola: Navega hasta la carpeta src/view/console en la ventana del proyecto y abre el archivo ConsolaRenta.py.
-  
-  Ejecuta el script:
-  
-  Haz clic derecho: Haz clic derecho en cualquier lugar dentro del archivo ConsolaRenta.py en el editor de código o en el nombre del archivo en la ventana del proyecto.
-  Selecciona "Run 'ConsolaRenta'": En el menú contextual que aparece, selecciona la opción "Run 'ConsolaRenta'". Si es la primera vez que ejecutas este script, puede que veas una opción como "Run..." y debas seleccionar el archivo ConsolaRenta.py.
-  Interactúa con la calculadora: PyCharm abrirá una ventana de "Run" en la parte inferior de la interfaz. La calculadora se iniciará en esta ventana y te pedirá que ingreses los datos solicitados. Ingresa los valores cuando se te solicite y presiona Enter.
-  
-  Visualiza los resultados: La calculadora mostrará la base gravable, la base gravable en UVT y el impuesto de renta calculado en la ventana de "Run".
-  
-  Nota Importante: Asegúrate de que tu entorno de Python esté correctamente configurado en ambos IDEs para que puedan encontrar e importar las dependencias de tu proyecto, incluyendo el código fuente en la carpeta src/model. La línea sys.path.append("src") en el script ayuda a que Python encuentre los módulos dentro de la carpeta src.
-
-## ¿Cómo está hecho?
+## 🤓 ¿Cómo está hecho?
 link de excel para la declaracion de impuestos de un asalariado (CASOS DE PRUEBA)
 https://docs.google.com/spreadsheets/d/1IwasnT6Vj87bwmWxKCBOTA8iFx_RkNW8GP2FXW7QbEE/edit?usp=sharing
 
@@ -215,7 +214,6 @@ Los contribuyentes asalariados en Colombia están obligados a presentar una decl
     
     5.Los ingresos durante el año fiscal superan las 1,400 UVT (COP 69.718.600) 
 
-**Estructura de carpetas**
 
 
 
