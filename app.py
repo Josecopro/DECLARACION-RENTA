@@ -24,18 +24,35 @@ class DeclaracionRentaApp:
             declaracion = self.controlador.get_declaracion_by_id(id)
             if not declaracion:
                 return "Declaración no encontrada", 404
-            return render_template('declaracion_detalle.html', declaracion=declaracion)
-
+            return render_template('declaracion_detalle.html', declaracion=declaracion
         @self.app.route('/api/declaraciones')
         def api_declaraciones():
-            declaraciones = self.controlador.get_all_declaraciones()
-            return jsonify([d.to_dict() for d in declaraciones])
+            declaraciones = []
+            current_id = 1
+            while True:
+            declaracion = self.controlador.BuscarPorId(str(current_id))
+            if not declaracion:
+                break
+            # If BuscarPorId returns a list, extend; else, append
+            if isinstance(declaracion, list):
+                declaraciones.extend(declaracion)
+            else:
+                declaraciones.append(declaracion)
+            current_id += 1
+            # Convert to dict if the objects have to_dict()
+            return jsonify([d.to_dict() if hasattr(d, 'to_dict') else d for d in declaraciones])
 
         @self.app.route('/buscar')
         def buscar():
             query = request.args.get('q', '')
-            periodo = request.args.get('periodo', '')
-            declaraciones = self.controlador.buscar_declaraciones(query, periodo)
+            resultado = self.controlador.BuscarPorId(query)
+            # Ensure 'declaraciones' is always a list
+            if resultado is None:
+                declaraciones = []
+            elif isinstance(resultado, list):
+                declaraciones = resultado
+            else:
+                declaraciones = [resultado]
             return render_template('resultados.html', declaraciones=declaraciones)
 
     def run(self, **kwargs):
