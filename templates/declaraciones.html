@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Todas las Declaraciones de Renta</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Todas las Declaraciones de Renta</h1>
+    {% if declaraciones %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Ingresos Brutos</th>
+                    <th>Aportes Salud/Pensión</th>
+                    <th>Dependientes</th>
+                    <th>Intereses Hipotecarios</th>
+                    <th>Base Gravable</th>
+                    <th>Base Gravable UVT</th>
+                    <th>Impuesto Renta</th>
+                    <th>Mensaje Error</th>
+                    <th>Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in declaraciones %}
+                <tr>
+                    <td>{{ d.id }}</td>
+                    <td>{{ d.fecha }}</td>
+                    <td>${{ "{:,.2f}".format(d.ingresos_brutos_anuales) }}</td>
+                    <td>${{ "{:,.2f}".format(d.aportes_salud_pension) }}</td>
+                    <td>{{ d.numero_dependientes }}</td>
+                    <td>${{ "{:,.2f}".format(d.intereses_credito_hipotecario) }}</td>
+                    <td>
+                        {% if d.base_gravable is not none %}
+                            ${{ "{:,.2f}".format(d.base_gravable) }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if d.base_gravable_uvt is not none %}
+                            {{ d.base_gravable_uvt }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if d.impuesto_renta is not none %}
+                            ${{ "{:,.2f}".format(d.impuesto_renta) }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if d.mensaje_error %}
+                            <span class="error">{{ d.mensaje_error }}</span>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('get_declaracion', id=d.id) }}">Ver detalle</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay declaraciones registradas.</p>
+    {% endif %}
+    <p><a href="{{ url_for('index') }}">Volver al inicio</a></p>
+</body>
+</html>

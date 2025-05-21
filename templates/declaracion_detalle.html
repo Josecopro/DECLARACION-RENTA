@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Declaración de Renta</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        .detalle { max-width: 600px; margin: auto; }
+        .detalle h1 { color: #333; }
+        .detalle table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+        .detalle th, .detalle td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        .detalle th { background-color: #f2f2f2; width: 40%; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="detalle">
+        <h1>Detalle de Declaración de Renta</h1>
+        {% if declaracion %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <td>{{ declaracion.id }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{{ declaracion.fecha }}</td>
+            </tr>
+            <tr>
+                <th>Ingresos Brutos Anuales</th>
+                <td>${{ "{:,.2f}".format(declaracion.ingresos_brutos_anuales) }}</td>
+            </tr>
+            <tr>
+                <th>Aportes Salud/Pensión</th>
+                <td>${{ "{:,.2f}".format(declaracion.aportes_salud_pension) }}</td>
+            </tr>
+            <tr>
+                <th>Número de Dependientes</th>
+                <td>{{ declaracion.numero_dependientes }}</td>
+            </tr>
+            <tr>
+                <th>Intereses Crédito Hipotecario</th>
+                <td>${{ "{:,.2f}".format(declaracion.intereses_credito_hipotecario) }}</td>
+            </tr>
+            <tr>
+                <th>Base Gravable</th>
+                <td>
+                    {% if declaracion.base_gravable is not none %}
+                        ${{ "{:,.2f}".format(declaracion.base_gravable) }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Base Gravable UVT</th>
+                <td>
+                    {% if declaracion.base_gravable_uvt is not none %}
+                        {{ declaracion.base_gravable_uvt }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Impuesto Renta</th>
+                <td>
+                    {% if declaracion.impuesto_renta is not none %}
+                        ${{ "{:,.2f}".format(declaracion.impuesto_renta) }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Mensaje Error</th>
+                <td>
+                    {% if declaracion.mensaje_error %}
+                        <span class="error">{{ declaracion.mensaje_error }}</span>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+        {% else %}
+            <p>No se encontró la declaración solicitada.</p>
+        {% endif %}
+        <p><a href="{{ url_for('get_declaraciones') }}">Volver a todas las declaraciones</a></p>
+        <p><a href="{{ url_for('index') }}">Volver al inicio</a></p>
+    </div>
+</body>
+</html>
