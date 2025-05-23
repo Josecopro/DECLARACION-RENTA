@@ -16,7 +16,7 @@ class DeclaracionRentaApp:
 
         @self.app.route('/declaraciones')
         def get_declaraciones():
-            declaraciones = self.controlador.get_all_declaraciones()
+            declaraciones = self.controlador.TodasDeclaraciones()
             return render_template('declaraciones.html', declaraciones=declaraciones)
 
         @self.app.route('/declaracion/<int:id>')
@@ -34,20 +34,17 @@ class DeclaracionRentaApp:
                 declaracion = self.controlador.BuscarPorId(str(current_id))
                 if not declaracion:
                     break
-                # If BuscarPorId returns a list, extend; else, append
                 if isinstance(declaracion, list):
                     declaraciones.extend(declaracion)
                 else:
                     declaraciones.append(declaracion)
                 current_id += 1
-            # Convert to dict if the objects have to_dict()
             return jsonify([d.to_dict() if hasattr(d, 'to_dict') else d for d in declaraciones])
 
         @self.app.route('/buscar')
         def buscar():
             query = request.args.get('q', '')
             resultado = self.controlador.BuscarPorId(query)
-            # Ensure 'declaraciones' is always a list
             if resultado is None:
                 declaraciones = []
             elif isinstance(resultado, list):

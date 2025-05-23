@@ -85,6 +85,24 @@ class ControladorDeclaraciones:
                 impuesto_renta=fila[8], mensaje_error=fila[9]
             )
         return None
+    @staticmethod
+    def TodasDeclaraciones():
+        """ Retorna todas las declaraciones """
+        cursor = ControladorDeclaraciones.ObtenerCursor()
+        cursor.execute("""
+            SELECT id, fecha, ingresos_brutos_anuales, aportes_salud_pension,
+                   numero_dependientes, intereses_credito_hipotecario,
+                   base_gravable, base_gravable_uvt, impuesto_renta, mensaje_error
+            FROM declaraciones_renta
+        """)
+        filas = cursor.fetchall()
+        return [Declaracion(
+            id=fila[0], fecha=fila[1],
+            ingresos_brutos_anuales=fila[2], aportes_salud_pension=fila[3],
+            numero_dependientes=fila[4], intereses_credito_hipotecario=fila[5],
+            base_gravable=fila[6], base_gravable_uvt=fila[7],
+            impuesto_renta=fila[8], mensaje_error=fila[9]
+        ) for fila in filas]
 
     @staticmethod
     def ObtenerCursor():
