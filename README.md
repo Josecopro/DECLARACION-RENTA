@@ -214,7 +214,8 @@ Los contribuyentes asalariados en Colombia están obligados a presentar una decl
     
     5.Los ingresos durante el año fiscal superan las 1,400 UVT (COP 69.718.600) 
     
-**URL de la aplicación**
+**URL de la aplicación:**
+
 https://declaracion-renta.onrender.com
 
 
