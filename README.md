@@ -13,33 +13,45 @@
 Programa que permite calcular si un usuario debe declarar renta, proporcionando valores como el impuesto a pagar y su vase gravable en Unidad de Valor Tributario (UVT) y en pesos colombianos (COP)
 
 ## Arquitectura del proyecto:
-
 ```
-DECLARACION_RENTA/
-├──.vscode/
-|   └──settings.json
-├──sql/
-|   └──crear_declaraciones.sql
-├──src/
-|   ├──controller/
-|   |    └──contolador_declaraciones.py
-|   ├──model/
-|   |    ├──__init__.py
-|   |    ├──declaraciones.py
-|   |    └──LogicaRenta.py
-|   └──view/
-|        ├──__init__.py
-|        ├──consola_renta.py
-|        └──InterfazRenta.py
-|
-├──tests/
-|   ├──Tests_Renta1.py
-|   └──tests_declaraiones.py
-|
-├──.gitignore
-├──README.md
-├──SecretConfig-sample.py
-└──requirements.txt
+DECLARACION-RENTA/
+├── .gitignore
+├── app.py
+├── DECLARACION DE RENTA.mp3
+├── README.md
+├── requirements.txt
+├── SecretConfig-sample.py
+├── SecretConfig.py
+├── .vscode/
+│   └── settings.json
+├── sql/
+│   └── crear_declaraciones.sql
+├── src/
+│   ├── __init__.py
+│   ├── controller/
+│   │   └── ControladorDeclaraciones.py
+│   ├── model/
+│   │   ├── __init__.py
+│   │   ├── declaraciones.py
+│   │   └── LogicaRenta.py
+│   └── view/
+│       ├── __init__.py
+│       ├── ConsolaRenta.py
+│       ├── InterfazRenta.py
+│       └── web/
+│           └── blueprint.py
+├── templates/
+│   ├── cambiar.html
+│   ├── crear.html
+│   ├── declaracion_detalle.html
+│   ├── declaraciones.html
+│   ├── eliminar.html
+│   ├── index.html
+│   ├── resultados.html
+│   └── ...
+├── tests/
+│   ├── Test_Renta1.py
+│   └── tests_declaraciones.py
 ```
 
 ## ¿Como ejecuto la GUI?
