@@ -22,21 +22,6 @@ def get_declaracion(id):
         return "Declaración no encontrada", 404
     return render_template('declaracion_detalle.html', declaracion=declaracion)
 
-@declaracion_renta_bp.route('/api/declaraciones')
-def api_declaraciones():
-    declaraciones = []
-    current_id = 1
-    while True:
-        declaracion = controlador.BuscarPorId(str(current_id))
-        if not declaracion:
-            break
-        if isinstance(declaracion, list):
-            declaraciones.extend(declaracion)
-        else:
-            declaraciones.append(declaracion)
-        current_id += 1
-    return jsonify([d.to_dict() if hasattr(d, 'to_dict') else d for d in declaraciones])
-
 @declaracion_renta_bp.route('/buscar')
 def buscar():
     query = request.args.get('q', '')
@@ -115,3 +100,25 @@ def crear():
         return render_template('crear.html', form_data=request.form)
 
     return render_template('crear.html')
+
+
+@declaracion_renta_bp.route('/tablas', methods=['GET', 'POST'])
+def tablas():
+    if request.method == 'POST':
+        flag = False
+        try:
+             
+            controlador.CrearTabla()
+            flag = True
+            if flag: 
+                flash('Tabla creada exitosamente', 'success')
+                return redirect(url_for('declaracion_renta.index'))
+            else:
+                flash('Error al crear las tablas.', 'danger')
+
+        except Exception as e:
+            flash(f'Ocurrió un error inesperado: {e}', 'danger')
+
+        return render_template('index.html')
+
+    return render_template('index.html')
