@@ -217,12 +217,12 @@ Los contribuyentes asalariados en Colombia están obligados a presentar una decl
 **¿Quién realizo la aplicación WEB?**
 
 *Juan José Becerra*
+
 *Valery Monsalve*
     
 **URL de la aplicación:**
 
-https://declaracion-renta-1.onrender.com
-
+https://declaracion-renta.onrender.com
 
 **¿Comó correr la aplicación WEB?**
 
