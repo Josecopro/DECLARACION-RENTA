@@ -219,5 +219,11 @@ Los contribuyentes asalariados en Colombia están obligados a presentar una decl
 https://declaracion-renta-1.onrender.com
 
 
+**¿Comó correr la aplicación WEB?**
+
+> Utiliza una base de datos en donde tengas los datos, como neon, despues de tenerla, con el archivo de SecretConfig.py creado con la previa explicacion, puedes correr app.py con f5 o desde la carpeta raiz ejecutar el comando `python3 app.py`
+ 
+
+
 
 
