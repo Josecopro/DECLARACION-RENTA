@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Items</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .actions a, .actions button {
+            margin-right: 5px;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .actions .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .actions .delete-btn {
+            background-color: #f44336;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manage Database Items</h1>
+
+    {% if items %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <!-- Add other headers for your item attributes here -->
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <!-- Add other cells for your item attributes here -->
+                <td class="actions">
+                    <!-- Link to an edit page, passing the item's ID -->
+                    <a href="{{ url_for('declaracion_renta.edit_item_route', item_id=item.id) }}" class="edit-btn">Edit</a>
+
+                    <!-- Form to delete an item, submitting to a delete route -->
+                    <form action="{{ url_for('declaracion_renta.delete_item_route', item_id=item.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No items found in the database.</p>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('declaracion_renta.add_item_route') }}">Add New Item</a>
+    <br>
+    <a href="{{ url_for('declaracion_renta.index') }}">Back to Home</a>
+
+
+</body>
+</html>

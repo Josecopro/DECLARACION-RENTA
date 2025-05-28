@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Nueva Declaración de Renta</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; background-color: #f4f4f4; color: #333; }
+        h1 { color: #333; text-align: center; }
+        form { 
+            max-width: 600px; 
+            margin: 2em auto; 
+            padding: 2em; 
+            background-color: #fff; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        div { margin-bottom: 1em; }
+        label { display: block; margin-bottom: 0.5em; font-weight: bold; }
+        input[type="text"],
+        input[type="date"],
+        input[type="number"] {
+            width: calc(100% - 22px); /* Adjust width to account for padding and border */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Important for width calculation */
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button[type="submit"]:hover { background-color: #0056b3; }
+        .flashes { list-style-type: none; padding: 0; margin-bottom: 1em; }
+        .flashes li { padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .flashes .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .flashes .danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .flashes .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        a { color: #007bff; text-decoration: none; display: inline-block; margin-top: 1em;}
+        a:hover { text-decoration: underline; }
+        .back-link-container { text-align: center; margin-top: 1em; }
+    </style>
+</head>
+<body>
+    <h1>Crear Nueva Declaración</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('declaracion_renta.crear') }}">
+        <div>
+            <label for="fecha">Fecha (YYYY-MM-DD):</label>
+            <input type="date" id="fecha" name="fecha" value="{{ form_data.fecha if form_data else '' }}" required>
+        </div>
+        <div>
+            <label for="ingresos_brutos_anuales">Ingresos Brutos Anuales:</label>
+            <input type="number" step="0.01" id="ingresos_brutos_anuales" name="ingresos_brutos_anuales" value="{{ form_data.ingresos_brutos_anuales if form_data else '' }}" placeholder="Ej: 50000000" required>
+        </div>
+        <div>
+            <label for="aportes_salud_pension">Aportes Salud y Pensión:</label>
+            <input type="number" step="0.01" id="aportes_salud_pension" name="aportes_salud_pension" value="{{ form_data.aportes_salud_pension if form_data else '' }}" placeholder="Ej: 5000000" required>
+        </div>
+        <div>
+            <label for="numero_dependientes">Número de Dependientes:</label>
+            <input type="number" id="numero_dependientes" name="numero_dependientes" value="{{ form_data.numero_dependientes if form_data else '' }}" placeholder="Ej: 2" required>
+        </div>
+        <div>
+            <label for="intereses_credito_hipotecario">Intereses Crédito Hipotecario (Opcional):</label>
+            <input type="number" step="0.01" id="intereses_credito_hipotecario" name="intereses_credito_hipotecario" value="{{ form_data.intereses_credito_hipotecario if form_data else '' }}" placeholder="Ej: 1200000">
+        </div>
+        <div>
+            <label for="base_gravable">Base Gravable (Opcional):</label>
+            <input type="number" step="0.01" id="base_gravable" name="base_gravable" value="{{ form_data.base_gravable if form_data else '' }}" placeholder="Ej: 40000000">
+        </div>
+        <div>
+            <label for="base_gravable_uvt">Base Gravable UVT (Opcional):</label>
+            <input type="number" step="0.01" id="base_gravable_uvt" name="base_gravable_uvt" value="{{ form_data.base_gravable_uvt if form_data else '' }}" placeholder="Ej: 1200">
+        </div>
+        <div>
+            <label for="impuesto_renta">Impuesto de Renta (Opcional):</label>
+            <input type="number" step="0.01" id="impuesto_renta" name="impuesto_renta" value="{{ form_data.impuesto_renta if form_data else '' }}" placeholder="Ej: 3000000">
+        </div>
+        <div>
+            <label for="mensaje_error">Mensaje de Error (Opcional):</label>
+            <input type="text" id="mensaje_error" name="mensaje_error" value="{{ form_data.mensaje_error if form_data else '' }}" placeholder="Ej: Error en el cálculo">
+        </div>
+        <div>
+            <button type="submit">Crear Declaración</button>
+        </div>
+    </form>
+    <div class="back-link-container">
+        <a href="{{ url_for('declaracion_renta.index') }}">Volver al Inicio</a>
+    </div>
+</body>
+</html>

@@ -1,13 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask
 # To run the app
 
-from src.view.web.blueprint import DeclaracionRentaApp
+from src.view.web.blueprint import declaracion_renta_bp
 
 app = Flask(__name__)
 
+app.secret_key = "ñamñamñam" 
+
 # Initialize the blueprint
-declaracion_renta_app = DeclaracionRentaApp()
-app.register_blueprint(declaracion_renta_app.blueprint)
+app.register_blueprint(declaracion_renta_bp)
 
 
 if __name__ == '__main__':

@@ -1,57 +1,117 @@
-from flask import Flask, render_template, request, jsonify, Blueprint
-
+from flask import render_template, request, jsonify, Blueprint, redirect, url_for, flash
 
 from src.controller.ControladorDeclaraciones import ControladorDeclaraciones
+from src.model.declaraciones import Declaracion
 
-class DeclaracionRentaApp:
-    def __init__(self):
-        self.blueprint = Blueprint('declaracion_renta', __name__, 'templates')
-        self.controlador = ControladorDeclaraciones()
-        self.setup_routes()
+controlador = ControladorDeclaraciones()
+declaracion_renta_bp = Blueprint('declaracion_renta', __name__, template_folder='templates')
 
-    def setup_routes(self):
-        @self.blueprint.route('/')
-        def index():
-            return render_template('index.html')
+@declaracion_renta_bp.route('/')
+def index():
+    return render_template('index.html')
 
-        @self.blueprint.route('/declaraciones')
-        def get_declaraciones():
-            declaraciones = self.controlador.TodasDeclaraciones()
-            return render_template('declaraciones.html', declaraciones=declaraciones)
+@declaracion_renta_bp.route('/declaraciones')
+def get_declaraciones():
+    declaraciones = controlador.TodasDeclaraciones()
+    return render_template('declaraciones.html', declaraciones=declaraciones)
 
-        @self.blueprint.route('/declaracion/<int:id>')
-        def get_declaracion(id):
-            declaracion = self.controlador.get_declaracion_by_id(id)
-            if not declaracion:
-                return "Declaración no encontrada", 404
-            return render_template('declaracion_detalle.html', declaracion=declaracion)
+@declaracion_renta_bp.route('/declaracion/<int:id>')
+def get_declaracion(id):
+    declaracion = controlador.get_declaracion_by_id(id)
+    if not declaracion:
+        return "Declaración no encontrada", 404
+    return render_template('declaracion_detalle.html', declaracion=declaracion)
 
-        @self.blueprint.route('/api/declaraciones')
-        def api_declaraciones():
-            declaraciones = []
-            current_id = 1
-            while True:
-                declaracion = self.controlador.BuscarPorId(str(current_id))
-                if not declaracion:
-                    break
-                if isinstance(declaracion, list):
-                    declaraciones.extend(declaracion)
+@declaracion_renta_bp.route('/api/declaraciones')
+def api_declaraciones():
+    declaraciones = []
+    current_id = 1
+    while True:
+        declaracion = controlador.BuscarPorId(str(current_id))
+        if not declaracion:
+            break
+        if isinstance(declaracion, list):
+            declaraciones.extend(declaracion)
+        else:
+            declaraciones.append(declaracion)
+        current_id += 1
+    return jsonify([d.to_dict() if hasattr(d, 'to_dict') else d for d in declaraciones])
+
+@declaracion_renta_bp.route('/buscar')
+def buscar():
+    query = request.args.get('q', '')
+    resultado = controlador.BuscarPorId(query)
+    if resultado is None:
+        declaraciones = []
+    elif isinstance(resultado, list):
+        declaraciones = resultado
+    else:
+        declaraciones = [resultado]
+    return render_template('resultados.html', declaraciones=declaraciones)
+
+@declaracion_renta_bp.route('/eliminar', methods=['GET', 'POST'])
+def eliminar():
+    if request.method == 'POST':
+        item_id_str = request.form.get('item_id')
+        if item_id_str:
+            try:
+                item_id = int(item_id_str)
+                success = controlador.EliminarDeclaracionPorId(item_id)
+                if success:
+                    flash(f'Declaración con ID {item_id} eliminada correctamente.', 'success')
                 else:
-                    declaraciones.append(declaracion)
-                current_id += 1
-            return jsonify([d.to_dict() if hasattr(d, 'to_dict') else d for d in declaraciones])
+                    flash(f'No se pudo eliminar la declaración con ID {item_id}. Verifique si el ID existe.', 'danger')
+            except ValueError:
+                flash('El ID proporcionado no es un número válido.', 'warning')
+            return redirect(url_for('declaracion_renta.get_declaraciones'))
+        else:
+            flash('No se proporcionó ningún ID para eliminar.', 'warning')
+            return render_template('eliminar.html')
 
-        @self.blueprint.route('/buscar')
-        def buscar():
-            query = request.args.get('q', '')
-            resultado = self.controlador.BuscarPorId(query)
-            if resultado is None:
-                declaraciones = []
-            elif isinstance(resultado, list):
-                declaraciones = resultado
+
+    return render_template('eliminar.html')
+
+
+@declaracion_renta_bp.route('/crear', methods=['GET', 'POST'])
+def crear():
+    if request.method == 'POST':
+        try:
+             
+            fecha = request.form.get('fecha')
+            ingresos_brutos_anuales = float(request.form.get('ingresos_brutos_anuales'))
+            aportes_salud_pension = float(request.form.get('aportes_salud_pension'))
+            numero_dependientes = int(request.form.get('numero_dependientes'))
+            intereses_credito_hipotecario = float(request.form.get('intereses_credito_hipotecario', 0.0)) 
+            base_gravable = float(request.form.get('base_gravable', 0.0))  
+            base_gravable_uvt = float(request.form.get('base_gravable_uvt', 0.0))  
+            impuesto_renta = float(request.form.get('impuesto_renta', 0.0))  
+            mensaje_error = request.form.get('mensaje_error', None)
+
+
+            nueva_declaracion = controlador.InsertarDeclaracion(Declaracion(
+                id=None,  # Assuming the ID is auto-generated by the database
+                fecha=fecha,
+                ingresos_brutos_anuales=ingresos_brutos_anuales,
+                aportes_salud_pension=aportes_salud_pension,
+                numero_dependientes=numero_dependientes,
+                intereses_credito_hipotecario=intereses_credito_hipotecario,
+                base_gravable=base_gravable,  
+                base_gravable_uvt=base_gravable_uvt,
+                impuesto_renta=impuesto_renta,  
+                mensaje_error=mensaje_error 
+            )
+            )
+
+            if nueva_declaracion: 
+                flash('Declaración creada exitosamente!', 'success')
+                return redirect(url_for('declaracion_renta.get_declaraciones'))
             else:
-                declaraciones = [resultado]
-            return render_template('resultados.html', declaraciones=declaraciones)
+                flash('Error al crear la declaración.', 'danger')
+        except ValueError:
+            flash('Por favor, ingrese valores numéricos válidos para los campos correspondientes.', 'danger')
+        except Exception as e:
+            flash(f'Ocurrió un error inesperado: {e}', 'danger')
 
-    def run(self, **kwargs):
-        self.blueprint.run(**kwargs)
+        return render_template('crear.html', form_data=request.form)
+
+    return render_template('crear.html')

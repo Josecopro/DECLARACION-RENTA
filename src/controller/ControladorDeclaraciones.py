@@ -103,6 +103,14 @@ class ControladorDeclaraciones:
             base_gravable=fila[6], base_gravable_uvt=fila[7],
             impuesto_renta=fila[8], mensaje_error=fila[9]
         ) for fila in filas]
+    
+    @staticmethod
+    def EliminarDeclaracionPorId(id):
+        """ Elimina una declaración por ID """
+        cursor = ControladorDeclaraciones.ObtenerCursor()
+        cursor.execute("DELETE FROM declaraciones_renta WHERE id = %s", (id,))
+        cursor.connection.commit()
+        return cursor.rowcount > 0
 
     @staticmethod
     def ObtenerCursor():

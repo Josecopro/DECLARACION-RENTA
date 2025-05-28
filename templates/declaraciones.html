@@ -68,7 +68,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ url_for('get_declaracion', id=d.id) }}">Ver detalle</a>
+                        <a href="{{ url_for('declaracion_renta.get_declaracion', id=d.id) }}">Ver detalle</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -77,6 +77,6 @@
     {% else %}
         <p>No hay declaraciones registradas.</p>
     {% endif %}
-    <p><a href="{{ url_for('index') }}">Volver al inicio</a></p>
+    <p><a href="{{ url_for('declaracion_renta.index') }}">Volver al inicio</a></p>
 </body>
 </html>
