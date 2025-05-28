@@ -217,6 +217,7 @@ Los contribuyentes asalariados en Colombia están obligados a presentar una decl
 **¿Quién realizo la aplicación WEB?**
 
 *Juan José Becerra*
+
 *Valery Monsalve*
     
 **URL de la aplicación:**
