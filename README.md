@@ -213,6 +213,11 @@ Los contribuyentes asalariados en Colombia están obligados a presentar una decl
     4.El valor total de los depósitos bancarios y otras inversiones supera las 1,400 UVT (COP 69.718.600) 
     
     5.Los ingresos durante el año fiscal superan las 1,400 UVT (COP 69.718.600) 
+
+**¿Quién realizo la aplicación WEB?**
+
+*Juan José Becerra*
+*Valery Monsalve*
     
 **URL de la aplicación:**
 
